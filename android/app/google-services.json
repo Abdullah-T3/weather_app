@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "143884456531",
+    "project_id": "auth-d1dba",
+    "storage_bucket": "auth-d1dba.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143884456531:android:2df0d1bda503b71fd4eca6",
+        "android_client_info": {
+          "package_name": "com.example.weather_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6gOlVEiOeSzQxiXuwge5DgdgOkZ2oeC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
