@@ -26,13 +26,11 @@ class WeatherCubit extends Cubit<WeatherState> {
       print('cachedData: $cachedData');
       if (cachedData != null) {
         if (!isClosed) emit(WeatherLoaded(cachedData));
-      }
-      else
-      {
+      } else {
         final response = await _dio.get(
           'https://api.weatherapi.com/v1/forecast.json',
           queryParameters: {
-            'key': 'f6521affb2b847dbae4190056241512',
+            'key': 'f17b4ef768eb4918b25225436252801',
             'q': 'Cairo',
             'days': '7',
             'aqi': 'no',
@@ -47,11 +45,7 @@ class WeatherCubit extends Cubit<WeatherState> {
           if (!isClosed) emit(WeatherError('Failed to load weather data'));
         }
       }
-
-
-
-
-    } on DioException catch (e , stackTrace) {
+    } on DioException catch (e, stackTrace) {
       print('stackTrace: $stackTrace');
       String errorMessage = 'Network error occurred';
       if (e.response != null) {

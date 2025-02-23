@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/MVVM/View_Models/Authcubit/auth_cubit.dart';
 import 'package:weather_app/Responsive/UiComponanets/InfoWidget.dart';
+import 'package:weather_app/helpers/cherryToast/CherryToastMsgs.dart';
 import 'package:weather_app/helpers/extantions.dart';
 import 'package:weather_app/routing/routs.dart';
 
@@ -10,7 +11,7 @@ import '../Widgets/custom_button.dart';
 import '../Widgets/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -36,30 +37,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
-      listener: (context, state) {
-        if (state is Authenticated) {
-          context.pushReplacementNamed(Routes.homePage);
-        } else if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        }
-      },
-      child: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, state) {
-          if (state is AuthLoading) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
+    return Infowidget(
+      builder: (context, deviceInfo) {
+        return BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is Authenticated) {
+              context.pushReplacementNamed(Routes.homePage);
+            } else if (state is AuthError) {
+              CherryToastMsgs.CherryToastError(
+                info: deviceInfo,
+                context: context,
+                title: 'Error',
+                description: state.message,
+              );
+            }
+          },
+          child: BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              if (state is AuthLoading) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
 
-          return Scaffold(
-            body: Form(
-              key: formKey,
-              child: Infowidget(
-                builder: (context, deviceInfo) {
-                  return SingleChildScrollView(
+              return Scaffold(
+                body: Form(
+                  key: formKey,
+                  child: SingleChildScrollView(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: deviceInfo.screenWidth * 0.05),
                       child: Column(
@@ -111,8 +115,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       passwordController.text,
                                     );
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Please enter valid data')),
+                                CherryToastMsgs.CherryToastError(
+                                  info: deviceInfo,
+                                  context: context,
+                                  title: 'Error',
+                                  description: 'Please enter valid data',
                                 );
                               }
                             },
@@ -124,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text("Don't have an account?", style: TextStyles.subtitle),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/SignUpScreen');
+                                  context.pushReplacementNamed(Routes.signUpScreen);
                                 },
                                 child: Text(
                                   'Sign Up',
@@ -136,13 +143,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-          );
-        },
-      ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

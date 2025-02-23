@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'MVVM/View_Models/Authcubit/auth_cubit.dart';
 import 'routing/appRouting.dart';
 import 'routing/routs.dart';
@@ -14,10 +13,8 @@ void main() async {
   await Hive.initFlutter();
   await Firebase.initializeApp();
   runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthCubit>.value(value: AuthCubit(FirebaseAuth.instance)),
-      ],
+    BlocProvider(
+      create: (context) => AuthCubit(FirebaseAuth.instance),
       child: MainApp(
         appRouter: AppRouts(),
       ),
@@ -36,6 +33,10 @@ class MainApp extends StatelessWidget {
         scaffoldBackgroundColor: ColorsManager.primaryColor,
         primaryColor: ColorsManager.primaryColor,
         fontFamily: "Poppins",
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: Colors.blue,
+          refreshBackgroundColor: Colors.white,
+        ),
       ),
       initialRoute: Routes.splashScreen,
       onGenerateRoute: appRouter.generateRoute,
